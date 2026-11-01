@@ -16,6 +16,6 @@ Here are some ideas to get you started:
 -->
 ## Git Koi
 
-![My Git Koi](./koi.gif)
+![My Git Koi](koi.gif)
 
 
