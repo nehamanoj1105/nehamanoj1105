@@ -2,15 +2,37 @@ name: Git Koi
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "20 0 * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/git-koi.yml
 
 permissions:
   contents: write
 
+concurrency: koi
+
 jobs:
-  generate:
+  koi:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Git Koi
-        uses: yalongwastaken/git-koi@v1.0.2
+      - uses: actions/checkout@v7
+
+      - uses: yalongwastaken/git-koi@v1.0.2
+        with:
+          login: nehamanoj1105
+          body: white
+          output-dir: koi
+
+      - name: Commit the koi if it changed
+        run: |
+          git add koi/koi.gif
+          if git diff --cached --quiet; then
+            echo "Koi unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Draw Git Koi"
+          git push
